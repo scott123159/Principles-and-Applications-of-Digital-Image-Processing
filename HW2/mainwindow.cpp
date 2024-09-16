@@ -6,11 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QVector<int> x;
-    x.append(0);
-    x.push_back(1);
-    auto ptr = x.data();
-    qDebug() << *(ptr + 1);
 }
 
 MainWindow::~MainWindow()
