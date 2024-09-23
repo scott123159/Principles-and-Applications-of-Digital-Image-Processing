@@ -27,10 +27,16 @@ private slots:
 
     void on_redoAction_triggered();
 
+    void on_grayScaleAction1_triggered();
+
 private:
     Ui::MainWindow *ui;
+    /*For undo and redo stack*/
     QStack<QImage> undo;
     QStack<QImage> redo;
+    /*Original image*/
     QImage image;
+    /*Set UI geometry when opening image*/
+    void setUIGeometry();
 };
 #endif // MAINWINDOW_H
