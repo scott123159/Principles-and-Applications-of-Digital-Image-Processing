@@ -29,13 +29,23 @@ private slots:
 
     void on_grayScaleAction1_triggered();
 
+    void on_grayScaleAction2_triggered();
+
+    void on_diffAction_triggered();
+
 private:
     Ui::MainWindow *ui;
+
     /*For undo and redo stack*/
     QStack<QImage> undo;
     QStack<QImage> redo;
+
     /*Original image*/
     QImage image;
+
+    /*For difference of two grayscale methods*/
+    QImage diffImage;
+
     /*Set UI geometry when opening image*/
     void setUIGeometry();
 };

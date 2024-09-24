@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "ImageProcessing.h"
+#include "histogram.h"
 
 #include <QFileDialog>
 
@@ -8,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    /*Set program title*/
-    this->setWindowTitle("HW2");
 }
 
 MainWindow::~MainWindow()
@@ -18,11 +18,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::setUIGeometry() {
-    /*Set window and label size*/
-    // ui->image->setGeometry(ui->image->x() + 20,
-    //                        ui->image->y() + 20,
-    //                        this->image.width(),
-    //                        this->image.height());
     this->setGeometry(this->x(),
                       this->y(),
                       this->image.width() + 20,
@@ -31,28 +26,36 @@ void MainWindow::setUIGeometry() {
 
 void MainWindow::on_exitAction_triggered()
 {
-    this->close();
+    close();
 }
 
 void MainWindow::on_openFileAction_triggered()
 {
-    /*Open image file that store in current folder*/
+    /*Open an image file that store in current folder*/
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"),
-                                                    ".\\",
+                                                    "",
                                                     tr("Image files (*.jpg *.jpeg *.bmp *.png);;All files (*.*)"));
 
-    /*If file is not selected, then return program*/
+    /*If the image file is not selected, then do nothing*/
     if (fileName.isNull()) return;
 
     /*Clear the undo/redo stack*/
-    if (!this->undo.isEmpty()) this->undo.clear();
-    if (!this->redo.isEmpty()) this->redo.clear();
+    if (!undo.isEmpty()) undo.clear();
+    if (!redo.isEmpty()) redo.clear();
+
     /*Set the program title with file that you selected*/
-    this->setWindowTitle("HW2 " + fileName.mid(fileName.lastIndexOf('/') + 1));
+    setWindowTitle("HW2 " + fileName.mid(fileName.lastIndexOf('/') + 1));
+
     /*Set current state*/
-    this->image = QImage(fileName);
-    this->setUIGeometry();
-    /*Display the image that you selected on the QLabel*/
+    image = QImage(fileName);
+    diffImage = cv::diff(cv::cvtColor(image, cv::COLOR_RGB2GRAY1),
+                         cv::cvtColor(image, cv::COLOR_RGB2GRAY2));
+
+    Histogram* hist = new Histogram(image, this);
+    hist->show();
+
+    /*Display the image on QLabel*/
+    setUIGeometry();
     ui->image->setPixmap(QPixmap::fromImage(image));
 }
 
@@ -62,8 +65,8 @@ void MainWindow::on_undoAction_triggered()
     if (undo.isEmpty()) return;
 
     /*Push current image into the redo stack*/
-    redo.push(this->image);
-    this->image = undo.pop();
+    redo.push(image);
+    image = undo.pop();
 
     /*Display new image on QLable*/
     ui->image->setPixmap(QPixmap::fromImage(image));
@@ -75,8 +78,8 @@ void MainWindow::on_redoAction_triggered()
     if (redo.isEmpty()) return;
 
     /*Push current image into the redo stack*/
-    undo.push(this->image);
-    this->image = redo.pop();
+    undo.push(image);
+    image = redo.pop();
 
     /*Display new image on QLable*/
     ui->image->setPixmap(QPixmap::fromImage(image));
@@ -88,16 +91,38 @@ void MainWindow::on_grayScaleAction1_triggered()
     if (image.isNull()) return;
 
     /*Push current image into undo stack*/
-    this->undo.push(image);
+    undo.push(image);
+    image = cv::cvtColor(image, cv::COLOR_RGB2GRAY1);
+    redo.clear();
 
-    /*Use "GRAY = (R + G + B) / 3.0" method to transform image into grayscale image*/
-    for (int y = 0; y < image.height(); y++) {
-        for (int x = 0; x < image.width(); x++) {
-            QRgb pixel = image.pixel(x, y);
-            const uchar newPixel = (qRed(pixel) + qGreen(pixel) + qBlue(pixel)) / 3.0;
-            image.setPixelColor(x, y, QColor(newPixel, newPixel, newPixel));
-        }
-    }
+    /*Display the image that you selected on the QLabel*/
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::on_grayScaleAction2_triggered()
+{
+    /*If there is no image was selected then return it*/
+    if (image.isNull()) return;
+
+    /*Push current image into undo stack*/
+    undo.push(image);
+    image = cv::cvtColor(image, cv::COLOR_RGB2GRAY2);
+    redo.clear();
+
+    /*Display the image that you selected on the QLabel*/
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::on_diffAction_triggered()
+{
+    /*If there is no image was selected then return it*/
+    if (image.isNull()) return;
+
+    /*Push current image into undo stack*/
+    undo.push(image);
+    image = diffImage;
+    redo.clear();
+
     /*Display the image that you selected on the QLabel*/
     ui->image->setPixmap(QPixmap::fromImage(image));
 }
