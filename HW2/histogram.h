@@ -2,6 +2,13 @@
 #define HISTOGRAM_H
 
 #include <QDialog>
+#include <QBarSet>
+#include <QBarSeries>
+#include <QChart>
+#include <QChartView>
+#include <QVBoxLayout>
+
+#include "ImageProcessing.h"
 
 namespace Ui {
 class Histogram;

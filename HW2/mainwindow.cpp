@@ -51,9 +51,6 @@ void MainWindow::on_openFileAction_triggered()
     diffImage = cv::diff(cv::cvtColor(image, cv::COLOR_RGB2GRAY1),
                          cv::cvtColor(image, cv::COLOR_RGB2GRAY2));
 
-    Histogram* hist = new Histogram(image, this);
-    hist->show();
-
     /*Display the image on QLabel*/
     setUIGeometry();
     ui->image->setPixmap(QPixmap::fromImage(image));
@@ -95,6 +92,10 @@ void MainWindow::on_grayScaleAction1_triggered()
     image = cv::cvtColor(image, cv::COLOR_RGB2GRAY1);
     redo.clear();
 
+    /*Show the histogram*/
+    Histogram* hist = new Histogram(image, this);
+    hist->show();
+
     /*Display the image that you selected on the QLabel*/
     ui->image->setPixmap(QPixmap::fromImage(image));
 }
@@ -108,6 +109,10 @@ void MainWindow::on_grayScaleAction2_triggered()
     undo.push(image);
     image = cv::cvtColor(image, cv::COLOR_RGB2GRAY2);
     redo.clear();
+
+    /*Show the histogram*/
+    Histogram* hist = new Histogram(image, this);
+    hist->show();
 
     /*Display the image that you selected on the QLabel*/
     ui->image->setPixmap(QPixmap::fromImage(image));

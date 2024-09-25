@@ -45,3 +45,16 @@ QImage cv::diff(const QImage& src1, const QImage& src2) {
     }
     return dst;
 }
+
+QVector<int> cv::calcHist(const QImage& src) {
+    /*For calculating the histogram*/
+    QVector<int> hist(256);
+
+    for (int y = 0; y < src.height(); y++) {
+        for (int x = 0; x < src.width(); x++) {
+            hist[qGray(src.pixel(x, y))] += 1;
+        }
+    }
+
+    return hist;
+}
