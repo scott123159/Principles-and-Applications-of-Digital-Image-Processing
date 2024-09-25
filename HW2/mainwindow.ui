@@ -51,7 +51,7 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile_f">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
@@ -65,7 +65,7 @@
     <addaction name="undoAction"/>
     <addaction name="redoAction"/>
    </widget>
-   <widget class="QMenu" name="menuColors">
+   <widget class="QMenu" name="menuImage">
     <property name="title">
      <string>Image</string>
     </property>
@@ -92,9 +92,16 @@
     </widget>
     <addaction name="menuZoom"/>
    </widget>
-   <addaction name="menuFile_f"/>
+   <widget class="QMenu" name="menuColors">
+    <property name="title">
+     <string>Colors</string>
+    </property>
+    <addaction name="thresholdAction"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
+   <addaction name="menuImage"/>
    <addaction name="menuColors"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -159,6 +166,11 @@
    </property>
    <property name="shortcut">
     <string>-</string>
+   </property>
+  </action>
+  <action name="thresholdAction">
+   <property name="text">
+    <string>Threshold</string>
    </property>
   </action>
  </widget>

@@ -58,3 +58,21 @@ QVector<int> cv::calcHist(const QImage& src) {
 
     return hist;
 }
+
+QImage cv::threshold(const QImage &src, const int &threshold)
+{
+    QImage dst(src);
+
+    /*Use threshold to determine the binary image*/
+    for (int y = 0; y < src.height(); y++) {
+        for (int x = 0; x < src.width(); x++) {
+
+            /*If current grayscale level is greater than threshold*/
+            /*then return 255 otherwise return 0*/
+            const int grayColor = qGray(src.pixel(x, y));
+            dst.setPixelColor(x, y, grayColor > threshold ? QColor(255, 255, 255) : QColor(0, 0, 0));
+        }
+    }
+
+    return dst;
+}

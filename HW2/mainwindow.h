@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "thresholddialog.h"
+
 #include <QMainWindow>
 #include <QStack>
 
@@ -18,6 +20,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void adjustThreshold(int);
+    void saveThreshold(int);
+    void cancel();
+
 private slots:
     void on_exitAction_triggered();
 
@@ -32,6 +39,8 @@ private slots:
     void on_grayScaleAction2_triggered();
 
     void on_diffAction_triggered();
+
+    void on_thresholdAction_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -48,5 +57,7 @@ private:
 
     /*Set UI geometry when opening image*/
     void setUIGeometry();
+
+    ThresholdDialog* thresholdDialog;
 };
 #endif // MAINWINDOW_H

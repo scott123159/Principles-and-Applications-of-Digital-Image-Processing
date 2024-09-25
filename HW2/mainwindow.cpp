@@ -10,6 +10,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    /*Create dialog window object for threshold*/
+    thresholdDialog = new ThresholdDialog(this);
+    /*connect signals and slots*/
+    connect(thresholdDialog, &ThresholdDialog::adjustThreshhold, this, &MainWindow::adjustThreshold);
+    connect(thresholdDialog, &ThresholdDialog::cancel, this, &MainWindow::cancel);
+    connect(thresholdDialog, &ThresholdDialog::ok, this, &MainWindow::saveThreshold);
 }
 
 MainWindow::~MainWindow()
@@ -17,11 +24,30 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::adjustThreshold(int threshold)
+{
+    /*Slide the slider in threshold dialog, then change the value of current image*/
+    ui->image->setPixmap(QPixmap::fromImage(cv::threshold(image, threshold)));
+}
+
+void MainWindow::saveThreshold(int threshold)
+{
+    undo.push(image);
+    redo.clear();
+    image = cv::threshold(image, threshold);
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::cancel()
+{
+    /*If the cancel button in dialog was clicked,*/
+    /*then restore the previous image*/
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
 void MainWindow::setUIGeometry() {
-    this->setGeometry(this->x(),
-                      this->y(),
-                      this->image.width() + 20,
-                      this->image.height() + 70);
+    /*Adjust the window size to fit the image size*/
+    setGeometry(x(), y(), image.width() + 20, image.height() + 70);
 }
 
 void MainWindow::on_exitAction_triggered()
@@ -131,3 +157,10 @@ void MainWindow::on_diffAction_triggered()
     /*Display the image that you selected on the QLabel*/
     ui->image->setPixmap(QPixmap::fromImage(image));
 }
+
+void MainWindow::on_thresholdAction_triggered()
+{
+    if (image.isNull()) return;
+    thresholdDialog->show();
+}
+

@@ -2,13 +2,6 @@
 #define HISTOGRAM_H
 
 #include <QDialog>
-#include <QBarSet>
-#include <QBarSeries>
-#include <QChart>
-#include <QChartView>
-#include <QVBoxLayout>
-
-#include "ImageProcessing.h"
 
 namespace Ui {
 class Histogram;
@@ -19,7 +12,8 @@ class Histogram : public QDialog
     Q_OBJECT
 
 public:
-    explicit Histogram(const QImage& src, QWidget *parent = nullptr);
+    explicit Histogram(const QImage& src,               //Pass the image that the histogram needs
+                       QWidget *parent = nullptr);
     ~Histogram();
 
 private:

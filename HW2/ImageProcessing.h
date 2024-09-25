@@ -8,9 +8,10 @@ namespace cv {
         COLOR_RGB2GRAY1,
         COLOR_RGB2GRAY2
     };
-    QImage cvtColor(const QImage& src, const int& code);
-    QImage diff(const QImage& src1, const QImage& src2);
-    QVector<int> calcHist(const QImage& src);
+    QImage cvtColor(const QImage&, const int&);
+    QImage diff(const QImage&, const QImage&);
+    QImage threshold(const QImage&, const int&);
+    QVector<int> calcHist(const QImage&);
 };
 
 #endif // IMAGEPROCESSING_H

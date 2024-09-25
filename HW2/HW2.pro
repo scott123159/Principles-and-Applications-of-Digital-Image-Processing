@@ -12,16 +12,19 @@ SOURCES += \
     ImageProcessing.cpp \
     histogram.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    thresholddialog.cpp
 
 HEADERS += \
     ImageProcessing.h \
     histogram.h \
-    mainwindow.h
+    mainwindow.h \
+    thresholddialog.h
 
 FORMS += \
     histogram.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    thresholddialog.ui
 
 RC_ICONS = bime.ico
 
