@@ -231,3 +231,22 @@ void MainWindow::on_actionBrightness_Contrast_triggered()
     bcDialog->show();
 }
 
+
+void MainWindow::on_actionHistogram_Equalization_triggered()
+{
+    /*If there is no image was selected then return it*/
+    if (image.isNull()) return;
+
+    /*Push current image into undo stack*/
+    undo.push(image);
+    image = cv::histogramEqualization(image);
+    redo.clear();
+
+    /*Show the histogram*/
+    Histogram* hist = new Histogram(image, this);
+    hist->show();
+
+    /*Display the image that you selected on the QLabel*/
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+

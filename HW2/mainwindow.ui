@@ -98,6 +98,7 @@
     </property>
     <addaction name="thresholdAction"/>
     <addaction name="actionBrightness_Contrast"/>
+    <addaction name="actionHistogram_Equalization"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -177,6 +178,11 @@
   <action name="actionBrightness_Contrast">
    <property name="text">
     <string>Brightness-Contrast</string>
+   </property>
+  </action>
+  <action name="actionHistogram_Equalization">
+   <property name="text">
+    <string>Histogram Equalization</string>
    </property>
   </action>
  </widget>

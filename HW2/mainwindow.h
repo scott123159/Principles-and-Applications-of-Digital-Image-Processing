@@ -52,6 +52,8 @@ private slots:
 
     void on_actionBrightness_Contrast_triggered();
 
+    void on_actionHistogram_Equalization_triggered();
+
 private:
     Ui::MainWindow *ui;
 

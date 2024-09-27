@@ -128,3 +128,44 @@ QImage cv::contrast(const QImage& src, const int& value)
 
     return dst;
 }
+
+QImage cv::histogramEqualization(const QImage& src)
+{
+    QImage dst(src);
+    int width = dst.width();
+    int height = dst.height();
+    int totalPixels = width * height;
+
+    // 計算直方圖
+    std::vector<int> histogram(256, 0);
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            int pixelValue = qGray(dst.pixel(x, y));
+            histogram[pixelValue]++;
+        }
+    }
+
+    // 計算累積分佈函數 (CDF)
+    std::vector<int> cdf(256, 0);
+    cdf[0] = histogram[0];
+    for (int i = 1; i < 256; ++i) {
+        cdf[i] = cdf[i - 1] + histogram[i];
+    }
+
+    // 計算均衡化後的像素值
+    std::vector<int> equalized(256, 0);
+    for (int i = 0; i < 256; ++i) {
+        equalized[i] = qRound((cdf[i] - cdf[0]) * 255.0 / (totalPixels - cdf[0]));
+    }
+
+    // 應用均衡化後的像素值
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            int pixelValue = qGray(dst.pixel(x, y));
+            int newPixelValue = equalized[pixelValue];
+            dst.setPixel(x, y, qRgb(newPixelValue, newPixelValue, newPixelValue));
+        }
+    }
+
+    return dst;
+}
