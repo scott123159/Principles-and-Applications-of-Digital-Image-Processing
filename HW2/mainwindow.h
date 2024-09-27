@@ -42,6 +42,10 @@ private slots:
 
     void on_thresholdAction_triggered();
 
+    void on_zoomInAction_triggered();
+
+    void on_zoomOutAction_triggered();
+
 private:
     Ui::MainWindow *ui;
 

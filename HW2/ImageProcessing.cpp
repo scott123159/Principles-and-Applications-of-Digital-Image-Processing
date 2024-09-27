@@ -76,3 +76,20 @@ QImage cv::threshold(const QImage &src, const int &threshold)
 
     return dst;
 }
+
+QImage cv::nearestNeighborInterpolation(const QImage& src, const double& ratio)
+{
+    QImage dst(src.width() * ratio, src.height() * ratio, src.format());
+
+    /*Nearest neightbor interpolation algorithm*/
+    for (int y = 0; y < dst.height(); y++) {
+        for (int x = 0; x < dst.width(); x++) {
+            const int newX = x / ratio;
+            const int newY = y / ratio;
+            const QColor color = src.pixelColor(newX, newY);
+            dst.setPixelColor(x, y, color);
+        }
+    }
+
+    return dst;
+}

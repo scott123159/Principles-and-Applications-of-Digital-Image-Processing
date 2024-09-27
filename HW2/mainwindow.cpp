@@ -47,7 +47,7 @@ void MainWindow::cancel()
 
 void MainWindow::setUIGeometry() {
     /*Adjust the window size to fit the image size*/
-    setGeometry(x(), y(), image.width() + 20, image.height() + 70);
+    setGeometry(x(), y(), image.width(), image.height());
 }
 
 void MainWindow::on_exitAction_triggered()
@@ -162,5 +162,23 @@ void MainWindow::on_thresholdAction_triggered()
 {
     if (image.isNull()) return;
     thresholdDialog->show();
+}
+
+
+void MainWindow::on_zoomInAction_triggered()
+{
+    if (image.isNull()) return;
+    image = cv::nearestNeighborInterpolation(image, 1.1);
+    ui->image->setPixmap(QPixmap::fromImage(image));
+    setUIGeometry();
+}
+
+
+void MainWindow::on_zoomOutAction_triggered()
+{
+    if (image.isNull()) return;
+    image = cv::nearestNeighborInterpolation(image, 0.9);
+    ui->image->setPixmap(QPixmap::fromImage(image));
+    setUIGeometry();
 }
 
