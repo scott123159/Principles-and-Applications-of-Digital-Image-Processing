@@ -93,3 +93,38 @@ QImage cv::nearestNeighborInterpolation(const QImage& src, const double& ratio)
 
     return dst;
 }
+
+QImage cv::brightness(const QImage& src, const int& value)
+{
+    QImage dst(src);
+
+    for (int y = 0; y < dst.height(); y++) {
+        for (int x = 0; x < dst.width(); x++) {
+            const QColor color = src.pixelColor(x, y);
+            int r = qBound(0, color.red() + value, 255);
+            int g = qBound(0, color.green() + value, 255);
+            int b = qBound(0, color.blue() + value, 255);
+            dst.setPixelColor(x, y, QColor(r, g, b));
+        }
+    }
+
+    return dst;
+}
+
+QImage cv::contrast(const QImage& src, const int& value)
+{
+    QImage dst(src);
+
+    const double factor = (259 * 1.0 * (value + 255)) / (255 * (259 - value));
+    for (int y = 0; y < dst.height(); y++) {
+        for (int x = 0; x < dst.width(); x++) {
+            const QColor color = src.pixelColor(x, y);
+            int r = qBound(0, (int)(factor * (color.red() - 128) + 128), 255);
+            int g = qBound(0, (int)(factor * (color.green() - 128) + 128), 255);
+            int b = qBound(0, (int)(factor * (color.blue() - 128) + 128), 255);
+            dst.setPixelColor(x, y, QColor(r, g, b));
+        }
+    }
+
+    return dst;
+}

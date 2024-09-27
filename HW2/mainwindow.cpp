@@ -13,10 +13,20 @@ MainWindow::MainWindow(QWidget *parent)
 
     /*Create dialog window object for threshold*/
     thresholdDialog = new ThresholdDialog(this);
-    /*connect signals and slots*/
+
+    /*Create dialog window object for Brightness-Constrast*/
+    bcDialog = new BrightnessContrastDialog(this);
+
+    /*connect signals and slots for threshold dialog*/
     connect(thresholdDialog, &ThresholdDialog::adjustThreshhold, this, &MainWindow::adjustThreshold);
     connect(thresholdDialog, &ThresholdDialog::cancel, this, &MainWindow::cancel);
     connect(thresholdDialog, &ThresholdDialog::ok, this, &MainWindow::saveThreshold);
+
+    /*connect signals and slots for brightness and contrast dialog*/
+    connect(bcDialog, &BrightnessContrastDialog::adjustBrightness, this, &MainWindow::adjustBrightness);
+    connect(bcDialog, &BrightnessContrastDialog::adjustContrast, this, &MainWindow::adjustContrast);
+    connect(bcDialog, &BrightnessContrastDialog::cancel, this, &MainWindow::cancel);
+    connect(bcDialog, &BrightnessContrastDialog::ok, this, &MainWindow::saveBrightnessAndContrast);
 }
 
 MainWindow::~MainWindow()
@@ -45,6 +55,26 @@ void MainWindow::cancel()
     ui->image->setPixmap(QPixmap::fromImage(image));
 }
 
+void MainWindow::saveBrightnessAndContrast(int b, int c)
+{
+    undo.push(image);
+    redo.clear();
+    image = cv::contrast(cv::brightness(image, b), c);
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::adjustBrightness(int value)
+{
+    //processedImage = cv::brightness(image, value);
+    ui->image->setPixmap(QPixmap::fromImage(cv::brightness(image, value)));
+}
+
+void MainWindow::adjustContrast(int value)
+{
+    //processedImage = cv::contrast(processedImage, value);
+    ui->image->setPixmap(QPixmap::fromImage(cv::contrast(image, value)));
+}
+
 void MainWindow::setUIGeometry() {
     /*Adjust the window size to fit the image size*/
     setGeometry(x(), y(), image.width(), image.height());
@@ -59,7 +89,7 @@ void MainWindow::on_openFileAction_triggered()
 {
     /*Open an image file that store in current folder*/
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"),
-                                                    "",
+                                                    QCoreApplication::applicationDirPath(),
                                                     tr("Image files (*.jpg *.jpeg *.bmp *.png);;All files (*.*)"));
 
     /*If the image file is not selected, then do nothing*/
@@ -93,6 +123,7 @@ void MainWindow::on_undoAction_triggered()
 
     /*Display new image on QLable*/
     ui->image->setPixmap(QPixmap::fromImage(image));
+    setUIGeometry();
 }
 
 void MainWindow::on_redoAction_triggered()
@@ -106,6 +137,7 @@ void MainWindow::on_redoAction_triggered()
 
     /*Display new image on QLable*/
     ui->image->setPixmap(QPixmap::fromImage(image));
+    setUIGeometry();
 }
 
 void MainWindow::on_grayScaleAction1_triggered()
@@ -168,7 +200,12 @@ void MainWindow::on_thresholdAction_triggered()
 void MainWindow::on_zoomInAction_triggered()
 {
     if (image.isNull()) return;
+
+    undo.push(image);
     image = cv::nearestNeighborInterpolation(image, 1.1);
+
+    redo.clear();
+
     ui->image->setPixmap(QPixmap::fromImage(image));
     setUIGeometry();
 }
@@ -177,8 +214,20 @@ void MainWindow::on_zoomInAction_triggered()
 void MainWindow::on_zoomOutAction_triggered()
 {
     if (image.isNull()) return;
+
+    undo.push(image);
     image = cv::nearestNeighborInterpolation(image, 0.9);
+
+    redo.clear();
+
     ui->image->setPixmap(QPixmap::fromImage(image));
     setUIGeometry();
+}
+
+
+void MainWindow::on_actionBrightness_Contrast_triggered()
+{
+    if (image.isNull()) return;
+    bcDialog->show();
 }
 

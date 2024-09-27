@@ -37,7 +37,6 @@ void ThresholdDialog::on_cancelButton_clicked()
 
 void ThresholdDialog::on_ThresholdDialog_finished(int result)
 {
-    qDebug() << result;
     emit cancel();
 }
 

@@ -12,6 +12,8 @@ namespace cv {
     QImage diff(const QImage&, const QImage&);
     QImage threshold(const QImage&, const int&);
     QImage nearestNeighborInterpolation(const QImage&, const double&);
+    QImage brightness(const QImage&, const int&);
+    QImage contrast(const QImage&, const int&);
     QVector<int> calcHist(const QImage&);
 };
 

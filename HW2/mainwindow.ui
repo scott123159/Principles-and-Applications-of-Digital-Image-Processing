@@ -97,6 +97,7 @@
      <string>Colors</string>
     </property>
     <addaction name="thresholdAction"/>
+    <addaction name="actionBrightness_Contrast"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -171,6 +172,11 @@
   <action name="thresholdAction">
    <property name="text">
     <string>Threshold</string>
+   </property>
+  </action>
+  <action name="actionBrightness_Contrast">
+   <property name="text">
+    <string>Brightness-Contrast</string>
    </property>
   </action>
  </widget>

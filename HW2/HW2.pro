@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     ImageProcessing.cpp \
+    brightnesscontrastdialog.cpp \
     histogram.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -17,11 +18,13 @@ SOURCES += \
 
 HEADERS += \
     ImageProcessing.h \
+    brightnesscontrastdialog.h \
     histogram.h \
     mainwindow.h \
     thresholddialog.h
 
 FORMS += \
+    brightnesscontrastdialog.ui \
     histogram.ui \
     mainwindow.ui \
     thresholddialog.ui

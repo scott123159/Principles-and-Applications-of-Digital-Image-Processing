@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "thresholddialog.h"
+#include "brightnesscontrastdialog.h"
 
 #include <QMainWindow>
 #include <QStack>
@@ -24,6 +25,9 @@ public slots:
     void adjustThreshold(int);
     void saveThreshold(int);
     void cancel();
+    void saveBrightnessAndContrast(int, int);
+    void adjustBrightness(int);
+    void adjustContrast(int);
 
 private slots:
     void on_exitAction_triggered();
@@ -46,6 +50,8 @@ private slots:
 
     void on_zoomOutAction_triggered();
 
+    void on_actionBrightness_Contrast_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -55,6 +61,7 @@ private:
 
     /*Original image*/
     QImage image;
+    QImage processedImage;
 
     /*For difference of two grayscale methods*/
     QImage diffImage;
@@ -63,5 +70,6 @@ private:
     void setUIGeometry();
 
     ThresholdDialog* thresholdDialog;
+    BrightnessContrastDialog* bcDialog;
 };
 #endif // MAINWINDOW_H
