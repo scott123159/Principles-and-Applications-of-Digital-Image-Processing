@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QStack>
+#include <gaussianblurdialog.h>
+#include <QElapsedTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,6 +20,9 @@ public:
     HW3(QWidget *parent = nullptr);
     ~HW3();
 
+public slots:
+    void applyGaussianBlur(double sigma, int kernelSize);
+
 private slots:
     void on_actionExit_triggered();
 
@@ -26,6 +31,8 @@ private slots:
     void on_actionUndo_triggered();
 
     void on_actionRedo_triggered();
+
+    void on_actionGaussian_Blur_triggered();
 
 private:
     Ui::HW3 *ui;
@@ -36,5 +43,10 @@ private:
     /*用來存放undo/redo的stack*/
     QStack<QImage> undoStack;
     QStack<QImage> redoStack;
+
+    GaussianBlurDialog* gaussianBlurDialog;
+
+    /*Create a timer to measure execution time*/
+    QElapsedTimer timer;
 };
 #endif // HW3_H

@@ -9,15 +9,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    gaussianblurdialog.cpp \
     imgproc.cpp \
     main.cpp \
     hw3.cpp
 
 HEADERS += \
+    gaussianblurdialog.h \
     hw3.h \
     imgproc.h
 
 FORMS += \
+    gaussianblurdialog.ui \
     hw3.ui
 
 RC_ICONS = bime.ico

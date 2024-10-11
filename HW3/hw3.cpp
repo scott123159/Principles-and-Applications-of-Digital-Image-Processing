@@ -1,5 +1,6 @@
 #include "hw3.h"
 #include "ui_hw3.h"
+#include "imgproc.h"
 
 #include <QFileDialog>
 
@@ -8,12 +9,41 @@ HW3::HW3(QWidget *parent)
     , ui(new Ui::HW3)
 {
     ui->setupUi(this);
+
+    /*Set fixed size 800x600*/
     setFixedSize(800, 600);
+
+    /*Create dialog object*/
+    gaussianBlurDialog = new GaussianBlurDialog(this);
+
+    /*Connect signal and slot when user click apply button*/
+    connect(gaussianBlurDialog, &GaussianBlurDialog::sendSigmaAndKernelSize, this, &HW3::applyGaussianBlur);
 }
 
 HW3::~HW3()
 {
     delete ui;
+}
+
+void HW3::applyGaussianBlur(double sigma, int kernelSize)
+{
+    undoStack.push_back(image);
+    redoStack.clear();
+
+    timer.start();
+
+    /*1. Get the orginal Gaussian kernel with sigma and kernelSize parameters
+      2. Flip the kernel
+      3. Apply convolution with orginal image
+    */
+    image = cv::convolution(image, cv::flipKernel(cv::getGaussianKernel(sigma, kernelSize)));
+
+    double elapsedTime = timer.elapsed();
+
+    ui->statusbar->showMessage(QString::number(elapsedTime / 1000) + " secs.");
+
+    /*Display new image on QLabel*/
+    ui->image->setPixmap(QPixmap::fromImage(image));
 }
 
 void HW3::on_actionExit_triggered()
@@ -32,7 +62,11 @@ void HW3::on_actionOpen_triggered()
     if (fileName.isEmpty())
         return;
 
+    undoStack.clear();
+    redoStack.clear();
+
     image = QImage(fileName);
+    //image = cv::convolution(image, cv::flipKernel(cv::getGaussianKernel(3.5, 21)));
 
     /*顯示影像並調整視窗大小*/
     ui->image->setPixmap(QPixmap::fromImage(image));
@@ -44,13 +78,37 @@ void HW3::on_actionOpen_triggered()
 
 void HW3::on_actionUndo_triggered()
 {
-    /*影像不可為空*/
-    if (image.isNull())
+    /*The stack can not be empty*/
+    if (undoStack.isEmpty())
         return;
+
+    /*Save this state*/
+    redoStack.push_back(image);
+
+    /*Pop from stack*/
+    image = undoStack.pop();
+    ui->image->setPixmap(QPixmap::fromImage(image));
 }
 void HW3::on_actionRedo_triggered()
 {
-    /*影像不可為空*/
+    /*The stack can not be empty*/
+    if (redoStack.isEmpty())
+        return;
+
+    /*Save this state*/
+    undoStack.push_back(image);
+
+    /*Pop from stack*/
+    image = redoStack.pop();
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
+void HW3::on_actionGaussian_Blur_triggered()
+{
+    /*Image can not be null or empty*/
     if (image.isNull())
         return;
+
+    /*Display Gaussian blur dialog*/
+    gaussianBlurDialog->show();
 }

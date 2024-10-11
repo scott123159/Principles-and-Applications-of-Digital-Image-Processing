@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>775</width>
-    <height>633</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,13 +29,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>775</width>
-     <height>21</height>
+     <width>800</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>&amp;File</string>
+     <string>File</string>
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionExit"/>
@@ -51,7 +51,14 @@
     <property name="title">
      <string>Filte&amp;rs</string>
     </property>
-    <addaction name="action_Blur"/>
+    <widget class="QMenu" name="menu_Blur">
+     <property name="title">
+      <string>&amp;Blur</string>
+     </property>
+     <addaction name="actionGaussian_Blur"/>
+     <addaction name="actionCustom"/>
+    </widget>
+    <addaction name="menu_Blur"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -109,14 +116,22 @@
     <string>Ctrl+Y</string>
    </property>
   </action>
-  <action name="action_Blur">
-   <property name="text">
-    <string>&amp;Blur</string>
-   </property>
-  </action>
   <action name="action_About">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DialogInformation"/>
+   </property>
    <property name="text">
     <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionGaussian_Blur">
+   <property name="text">
+    <string>Gaussian Blur</string>
+   </property>
+  </action>
+  <action name="actionCustom">
+   <property name="text">
+    <string>Custom</string>
    </property>
   </action>
  </widget>
