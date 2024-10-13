@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>193</width>
+    <width>190</width>
     <height>130</height>
    </rect>
   </property>
@@ -26,7 +26,7 @@
     <string>Apply</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>11</x>
@@ -59,14 +59,14 @@
       <item>
        <widget class="QLineEdit" name="sigmaLineEdit">
         <property name="text">
-         <string>3.5</string>
+         <string>2.0</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLineEdit" name="kernelSizeLineEdit">
         <property name="text">
-         <string>3</string>
+         <string>5</string>
         </property>
        </widget>
       </item>

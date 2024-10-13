@@ -42,27 +42,27 @@
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>&amp;Edit</string>
+     <string>Edit</string>
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
    </widget>
    <widget class="QMenu" name="menuFilters">
     <property name="title">
-     <string>Filte&amp;rs</string>
+     <string>Filters</string>
     </property>
     <widget class="QMenu" name="menu_Blur">
      <property name="title">
-      <string>&amp;Blur</string>
+      <string>Blur</string>
      </property>
      <addaction name="actionGaussian_Blur"/>
-     <addaction name="actionCustom"/>
+     <addaction name="actionMedian_Blur"/>
     </widget>
     <addaction name="menu_Blur"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>&amp;Help</string>
+     <string>Help</string>
     </property>
     <addaction name="action_About"/>
    </widget>
@@ -77,7 +77,7 @@
     <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>
    </property>
    <property name="text">
-    <string>&amp;Open</string>
+    <string>Open</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -88,7 +88,7 @@
     <iconset theme="QIcon::ThemeIcon::ApplicationExit"/>
    </property>
    <property name="text">
-    <string>&amp;Exit</string>
+    <string>Exit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -99,7 +99,7 @@
     <iconset theme="QIcon::ThemeIcon::EditUndo"/>
    </property>
    <property name="text">
-    <string>&amp;Undo</string>
+    <string>Undo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -110,7 +110,7 @@
     <iconset theme="QIcon::ThemeIcon::EditRedo"/>
    </property>
    <property name="text">
-    <string>&amp;Redo</string>
+    <string>Redo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
@@ -121,7 +121,7 @@
     <iconset theme="QIcon::ThemeIcon::DialogInformation"/>
    </property>
    <property name="text">
-    <string>&amp;About</string>
+    <string>About</string>
    </property>
   </action>
   <action name="actionGaussian_Blur">
@@ -129,9 +129,9 @@
     <string>Gaussian Blur</string>
    </property>
   </action>
-  <action name="actionCustom">
+  <action name="actionMedian_Blur">
    <property name="text">
-    <string>Custom</string>
+    <string>Median Blur</string>
    </property>
   </action>
  </widget>

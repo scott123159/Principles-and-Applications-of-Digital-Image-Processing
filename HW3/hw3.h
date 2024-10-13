@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 #include <QStack>
-#include <gaussianblurdialog.h>
 #include <QElapsedTimer>
+
+#include "gaussianblurdialog.h"
+#include "medianblurdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,6 +25,8 @@ public:
 public slots:
     void applyGaussianBlur(double sigma, int kernelSize);
 
+    void applyMedianBlur(int kernelSize);
+
 private slots:
     void on_actionExit_triggered();
 
@@ -34,17 +38,20 @@ private slots:
 
     void on_actionGaussian_Blur_triggered();
 
+    void on_actionMedian_Blur_triggered();
+
 private:
     Ui::HW3 *ui;
 
-    /*原始影像*/
+    /*Original image*/
     QImage image;
 
-    /*用來存放undo/redo的stack*/
+    /*The stack for undo/redo operation*/
     QStack<QImage> undoStack;
     QStack<QImage> redoStack;
 
     GaussianBlurDialog* gaussianBlurDialog;
+    MedianBlurDialog* medianBlurDialog;
 
     /*Create a timer to measure execution time*/
     QElapsedTimer timer;

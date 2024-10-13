@@ -12,16 +12,19 @@ SOURCES += \
     gaussianblurdialog.cpp \
     imgproc.cpp \
     main.cpp \
-    hw3.cpp
+    hw3.cpp \
+    medianblurdialog.cpp
 
 HEADERS += \
     gaussianblurdialog.h \
     hw3.h \
-    imgproc.h
+    imgproc.h \
+    medianblurdialog.h
 
 FORMS += \
     gaussianblurdialog.ui \
-    hw3.ui
+    hw3.ui \
+    medianblurdialog.ui
 
 RC_ICONS = bime.ico
 

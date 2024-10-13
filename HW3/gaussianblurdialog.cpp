@@ -6,6 +6,7 @@ GaussianBlurDialog::GaussianBlurDialog(QWidget *parent)
     , ui(new Ui::GaussianBlurDialog)
 {
     ui->setupUi(this);
+    setFixedSize(QSize(190, 130));
 }
 
 GaussianBlurDialog::~GaussianBlurDialog()

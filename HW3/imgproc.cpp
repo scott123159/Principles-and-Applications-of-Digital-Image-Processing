@@ -70,9 +70,58 @@ QImage cv::convolution(const QImage &src, const Kernel &kernel)
                     }
                 }
             }
+            r = qBound<int>(0, r, 255);
+            g = qBound<int>(0, g, 255);
+            b = qBound<int>(0, b, 255);
             dst.setPixelColor(x, y, QColor(r, g, b));
         }
     }
 
     return dst;
+}
+
+QImage cv::applyMedianBlur(const QImage &image, const int kernelSize)
+{
+    QImage result(image.size(), image.format());
+
+    // Calculate the half of the kernel size
+    int halfKernel = kernelSize / 2;
+
+    // Loop through each pixel of the image
+    for (int y = 0; y < image.height(); ++y) {
+        for (int x = 0; x < image.width(); ++x) {
+            std::vector<int> reds, greens, blues;
+
+            // Loop through the kernel (neighborhood)
+            for (int ky = -halfKernel; ky <= halfKernel; ++ky) {
+                for (int kx = -halfKernel; kx <= halfKernel; ++kx) {
+                    int neighborX = x + kx;
+                    int neighborY = y + ky;
+
+                    // Ensure the pixel is within image bounds
+                    if (neighborX >= 0 && neighborX < image.width() && neighborY >= 0 && neighborY < image.height()) {
+                        QColor pixelColor = image.pixelColor(neighborX, neighborY);
+                        reds.push_back(pixelColor.red());
+                        greens.push_back(pixelColor.green());
+                        blues.push_back(pixelColor.blue());
+                    }
+                }
+            }
+
+            // Sort the pixel values to find the median
+            std::sort(reds.begin(), reds.end());
+            std::sort(greens.begin(), greens.end());
+            std::sort(blues.begin(), blues.end());
+
+            // Get the median value (the middle value)
+            int medianRed = reds[reds.size() / 2];
+            int medianGreen = greens[greens.size() / 2];
+            int medianBlue = blues[blues.size() / 2];
+
+            // Set the new pixel value in the result image
+            result.setPixelColor(x, y, QColor(medianRed, medianGreen, medianBlue));
+        }
+    }
+
+    return result;
 }
