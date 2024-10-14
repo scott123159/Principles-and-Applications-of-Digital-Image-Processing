@@ -21,7 +21,7 @@ HW3::HW3(QWidget *parent)
     /*Connect signals and slots when user click apply button*/
     connect(gaussianBlurDialog, &GaussianBlurDialog::sendSigmaAndKernelSize, this, &HW3::applyGaussianBlur);
     connect(medianBlurDialog, &MedianBlurDialog::sendKernelSize, this, &HW3::applyMedianBlur);
-    // connect(marrHildrethEdgeDetectionDialog);
+    connect(marrHildrethEdgeDetectionDialog, &MarrHildrethEdgeDetectionDialog::sendThresholdAndKernelSize, this, &HW3::applyMarrHildreth);
 }
 
 HW3::~HW3()
@@ -67,11 +67,34 @@ void HW3::applyMedianBlur(int kernelSize)
     /*Start the timer*/
     timer.start();
 
+    image = cv::applyMedianBlur(image, kernelSize);
+
+    /*Stop the timer and calculate the elapsed time*/
+    const double elapsedTime = timer.elapsed() / 1000.;
+
+    /*Display the elapsed time on status bar*/
+    ui->statusbar->showMessage(QString("CPU time: %1 (sec.)").arg(elapsedTime));
+
+    /*Display new image on QLabel*/
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
+void HW3::applyMarrHildreth(const int size, const double threshold)
+{
+    /*Save previous state*/
+    undoStack.push_back(image);
+
+    /*Clear the redo stack*/
+    redoStack.clear();
+
+    /*Start the timer*/
+    timer.start();
+
     /*1. Get the orginal Gaussian kernel with sigma and kernelSize parameters
       2. Flip the kernel
       3. Apply convolution with orginal image
     */
-    image = cv::applyMedianBlur(image, kernelSize);
+    image = cv::applyMarrHildreth(image, size, threshold);
 
     /*Stop the timer and calculate the elapsed time*/
     const double elapsedTime = timer.elapsed() / 1000.;
@@ -104,7 +127,6 @@ void HW3::on_actionOpen_triggered()
     redoStack.clear();
 
     image = QImage(fileName);
-    image = cv::convolution(image, cv::getLaplacianOfGaussianKernel(4, 25));
 
     /*顯示影像並調整視窗大小*/
     ui->image->setPixmap(QPixmap::fromImage(image));

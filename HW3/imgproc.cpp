@@ -39,7 +39,6 @@ Kernel cv::flipKernel(const Kernel &kernel)
 
 QImage cv::convolution(const QImage &src, const Kernel &kernel)
 {
-
     /*Copy from original image with copy constructor*/
     QImage dst(src);
 
@@ -209,4 +208,72 @@ Kernel cv::getLaplacianOfGaussianKernel(const double sigma, const int size)
         }
     }
     return kernel;
+}
+
+QImage cv::applyMarrHildreth(const QImage &src, const int size, const double threshold)
+{
+    QImage dst(src);
+
+    /*Calculate sigma*/
+    const double sigma = size / 6.0;
+
+    /*Get the LoG kernel*/
+    const Kernel kernel = cv::getLaplacianOfGaussianKernel(sigma, size);
+
+    QVector<QVector<double>> values(src.height(), QVector<double>(src.width(), 0));
+
+    /*Convolution for numeric image vector*/
+    const int dx = kernel[0].size() / 2;
+    const int dy = kernel.size() / 2;
+
+    for (int y = 0; y < src.height(); y++)
+    {
+        for (int x = 0; x < src.width(); x++)
+        {
+            dst.setPixelColor(x, y, QColor(0, 0, 0));
+            double gray = 0;
+            for (int z = 0; z < kernel.size(); z++)
+            {
+                for (int w = 0; w < kernel[0].size(); w++)
+                {
+                    const int newX = x - dx + w;
+                    const int newY = y - dy + z;
+
+                    if (newX >= 0 && newX < src.width() && newY >= 0 && newY < src.height()) {
+                        const QColor color = src.pixelColor(newX, newY);
+                        const double coff = kernel[z][w];
+
+                        /*Use grayscale color*/
+                        gray += qGray(color.red(), color.green(), color.blue()) * coff;
+                    }
+                }
+            }
+
+            /*Store the value of convolution of LoG*/
+            values[y][x] = gray;
+        }
+    }
+
+    for (int y = 1; y < values.size() - 1; y++)
+        for (int x = 1; x < values[0].size() - 1; x++) {
+
+            /*Current value*/
+            const double center = values[y][x];
+
+            /*Scan the eight neighboring points around the pixel*/
+            for (int z = -1; z <= 1; z++)
+                for (int w = -1; w <= 1; w++) {
+                    if (z == 0 && w == 0)
+                        continue;
+
+                    const double neighbor = values[y + z][x + w];
+
+                    if ((center > 0 && neighbor < 0) || (center < 0 && neighbor > 0))
+
+                        /*If the |P(x, y)| is greater than threshold then mark it as edge*/
+                        if (qAbs(center) > threshold)
+                            dst.setPixelColor(x, y, QColor(255, 255, 255));
+                }
+        }
+    return dst;
 }

@@ -20,7 +20,7 @@ void MedianBlurDialog::on_pushButton_clicked()
 
     const int kernelSize = ui->kernelSizeLineEdit->text().toInt(&chk);
 
-    if (!chk || (kernelSize % 2 != 1))
+    if (!chk || (kernelSize % 2 != 1) || kernelSize < 3)
         return;
 
     emit sendKernelSize(kernelSize);

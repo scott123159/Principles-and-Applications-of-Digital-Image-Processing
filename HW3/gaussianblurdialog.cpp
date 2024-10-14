@@ -28,5 +28,8 @@ void GaussianBlurDialog::on_pushButton_clicked()
     if (kernelSize % 2 != 1)
         return;
 
+    if (kernelSize < 3)
+        return;
+
     emit sendSigmaAndKernelSize(sigma, kernelSize);
 }

@@ -28,6 +28,8 @@ public slots:
 
     void applyMedianBlur(int kernelSize);
 
+    void applyMarrHildreth(const int size, const double threshold);
+
 private slots:
     void on_actionExit_triggered();
 

@@ -28,7 +28,7 @@ QImage convolution(const QImage& src, const Kernel& kernel);
 /*Use median blur on image directly*/
 QImage applyMedianBlur(const QImage& src, const int kernelSize);
 
-QImage applyMarrHildreth(const QImage& src, double sigma, int kernelSize, double threshold);
+QImage applyMarrHildreth(const QImage& src, const int size, const double threshold);
 }
 
 #endif // IMGPROC_H
