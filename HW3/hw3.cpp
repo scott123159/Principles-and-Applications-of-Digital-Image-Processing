@@ -16,10 +16,12 @@ HW3::HW3(QWidget *parent)
     /*Create dialog objects*/
     gaussianBlurDialog = new GaussianBlurDialog(this);
     medianBlurDialog = new MedianBlurDialog(this);
+    marrHildrethEdgeDetectionDialog = new MarrHildrethEdgeDetectionDialog(this);
 
     /*Connect signals and slots when user click apply button*/
     connect(gaussianBlurDialog, &GaussianBlurDialog::sendSigmaAndKernelSize, this, &HW3::applyGaussianBlur);
     connect(medianBlurDialog, &MedianBlurDialog::sendKernelSize, this, &HW3::applyMedianBlur);
+    // connect(marrHildrethEdgeDetectionDialog);
 }
 
 HW3::~HW3()
@@ -102,6 +104,7 @@ void HW3::on_actionOpen_triggered()
     redoStack.clear();
 
     image = QImage(fileName);
+    image = cv::convolution(image, cv::getLaplacianOfGaussianKernel(4, 25));
 
     /*顯示影像並調整視窗大小*/
     ui->image->setPixmap(QPixmap::fromImage(image));
@@ -156,4 +159,41 @@ void HW3::on_actionMedian_Blur_triggered()
 
     /*Display median blur dialog*/
     medianBlurDialog->show();
+}
+
+void HW3::on_actionSobel_triggered()
+{
+    if (image.isNull())
+        return;
+
+    /*Save previous state*/
+    undoStack.push_back(image);
+
+    /*Clear the redo stack*/
+    redoStack.clear();
+
+    /*Start the timer*/
+    timer.start();
+
+    /*Apply Sobel operator on image*/
+    image = cv::applySobel(image);
+
+    /*Stop the timer and calculate the elapsed time*/
+    const double elapsedTime = timer.elapsed() / 1000.;
+
+    /*Display the elapsed time on status bar*/
+    ui->statusbar->showMessage(QString("CPU time: %1 (sec.)").arg(elapsedTime));
+
+    /*Display new image on QLabel*/
+    ui->image->setPixmap(QPixmap::fromImage(image));
+}
+
+void HW3::on_actionMarr_Hildreth_triggered()
+{
+    /*Image can not be null or empty*/
+    // if (image.isNull())
+    //     return;
+
+    /*Display edge detection dialog*/
+    marrHildrethEdgeDetectionDialog->show();
 }

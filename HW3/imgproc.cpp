@@ -125,3 +125,88 @@ QImage cv::applyMedianBlur(const QImage &image, const int kernelSize)
 
     return result;
 }
+
+QImage cv::applySobel(const QImage &src)
+{
+    QImage dst(src);
+    int rx, ry, gx, gy, bx, by;
+
+    /*Use Sobel kernel such that [[-1, 0, 1],
+                                  [-2, 0, 2],
+                                  [-1, 0, 1]] for horizontal direction*/
+
+    /*Use Sobel kernel such that [[-1, -2, -1],
+                                  [ 0,  0,  0],
+                                  [ 1,  2,  1]] for vertical direction*/
+    for(int i = 1; i < src.height() - 1; i++) {
+        for(int j = 1; j < src.width() -1; j++) {
+            rx = qRed(src.pixel(j - 1, i - 1))
+            + qRed(src.pixel(j - 1, i)) * 2
+                + qRed(src.pixel(j - 1, i + 1))
+                + qRed(src.pixel(j + 1, i - 1)) * (-1)
+                + qRed(src.pixel(j + 1, i)) * (-2)
+                + qRed(src.pixel(j + 1, i + 1)) * (-1);
+            ry = qRed(src.pixel(j - 1, i - 1))
+                 + qRed(src.pixel(j, i - 1)) * 2
+                 + qRed(src.pixel(j + 1, i - 1))
+                 + qRed(src.pixel(j - 1, i + 1)) * (-1)
+                 + qRed(src.pixel(j, i + 1)) * (-2)
+                 + qRed(src.pixel(j + 1, i + 1)) * (-1);
+            int r = fmin(255, sqrt(rx * rx + ry * ry));
+
+            gx = qGreen(src.pixel(j - 1, i - 1))
+                 + qGreen(src.pixel(j - 1, i)) * 2
+                 + qGreen(src.pixel(j - 1, i + 1))
+                 + qGreen(src.pixel(j + 1, i - 1)) * (-1)
+                 + qGreen(src.pixel(j + 1, i)) * (-2)
+                 + qGreen(src.pixel(j + 1, i + 1)) * (-1);
+            gy = qGreen(src.pixel(j - 1, i - 1))
+                 + qGreen(src.pixel(j, i - 1)) * 2
+                 + qGreen(src.pixel(j + 1, i - 1))
+                 + qGreen(src.pixel(j - 1, i + 1)) * (-1)
+                 + qGreen(src.pixel(j, i + 1)) * (-2)
+                 + qGreen(src.pixel(j + 1, i + 1)) * (-1);
+            int g = fmin(255, sqrt(gx * gx + gy * gy));
+
+            bx = qBlue(src.pixel(j - 1, i - 1))
+                 + qBlue(src.pixel(j - 1, i)) * 2
+                 + qBlue(src.pixel(j - 1, i + 1))
+                 + qBlue(src.pixel(j + 1, i - 1)) * (-1)
+                 + qBlue(src.pixel(j + 1, i)) * (-2)
+                 + qBlue(src.pixel(j + 1, i + 1)) * (-1);
+            by = qBlue(src.pixel(j - 1, i - 1))
+                 + qBlue(src.pixel(j, i - 1)) * 2
+                 + qBlue(src.pixel(j + 1, i - 1))
+                 + qBlue(src.pixel(j - 1, i + 1)) * (-1)
+                 + qBlue(src.pixel(j, i + 1)) * (-2)
+                 + qBlue(src.pixel(j + 1, i + 1)) * (-1);
+            int b = fmin(255, sqrt(bx * bx + by * by));
+
+            dst.setPixel(j, i, qRgb(r, g, b));
+        }
+    }
+    return dst;
+}
+
+Kernel cv::getLaplacianOfGaussianKernel(const double sigma, const int size)
+{
+    /*Initialize kernel to an empty kernel*/
+    Kernel kernel(size, QVector<double>(size, 0));
+
+    /*For half size of kernel size*/
+    const int halfSize = size / 2;
+
+    /*σ ^ 2 and σ ^ 4*/
+    double sigma2 = sigma * sigma;
+    double sigma4 = sigma2 * sigma2;
+    double normalization = -1.0 / (M_PI * sigma4);
+
+    for (int y = -halfSize; y <= halfSize; ++y) {
+        for (int x = -halfSize; x <= halfSize; ++x) {
+            double r2 = x * x + y * y;
+            double value = normalization * (1 - r2 / (2 * sigma2)) * exp(-r2 / (2 * sigma2));
+            kernel[y + halfSize][x + halfSize] = value;
+        }
+    }
+    return kernel;
+}

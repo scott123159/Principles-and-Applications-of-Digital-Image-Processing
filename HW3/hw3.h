@@ -7,6 +7,7 @@
 
 #include "gaussianblurdialog.h"
 #include "medianblurdialog.h"
+#include "marrhildrethedgedetectiondialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -40,6 +41,10 @@ private slots:
 
     void on_actionMedian_Blur_triggered();
 
+    void on_actionSobel_triggered();
+
+    void on_actionMarr_Hildreth_triggered();
+
 private:
     Ui::HW3 *ui;
 
@@ -52,6 +57,7 @@ private:
 
     GaussianBlurDialog* gaussianBlurDialog;
     MedianBlurDialog* medianBlurDialog;
+    MarrHildrethEdgeDetectionDialog* marrHildrethEdgeDetectionDialog;
 
     /*Create a timer to measure execution time*/
     QElapsedTimer timer;

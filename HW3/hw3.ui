@@ -58,7 +58,15 @@
      <addaction name="actionGaussian_Blur"/>
      <addaction name="actionMedian_Blur"/>
     </widget>
+    <widget class="QMenu" name="menuEdge_Detect">
+     <property name="title">
+      <string>Edge Detect</string>
+     </property>
+     <addaction name="actionSobel"/>
+     <addaction name="actionMarr_Hildreth"/>
+    </widget>
     <addaction name="menu_Blur"/>
+    <addaction name="menuEdge_Detect"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -132,6 +140,16 @@
   <action name="actionMedian_Blur">
    <property name="text">
     <string>Median Blur</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionMarr_Hildreth">
+   <property name="text">
+    <string>Marr-Hildreth</string>
    </property>
   </action>
  </widget>
