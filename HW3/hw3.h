@@ -8,6 +8,7 @@
 #include "gaussianblurdialog.h"
 #include "medianblurdialog.h"
 #include "marrhildrethedgedetectiondialog.h"
+#include "localenhancementdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,6 +31,8 @@ public slots:
 
     void applyMarrHildreth(const int size, const double threshold);
 
+    void applyLocalEnhancement(int size, double c, double k0, double k1, double k2, double k3);
+
 private slots:
     void on_actionExit_triggered();
 
@@ -47,6 +50,8 @@ private slots:
 
     void on_actionMarr_Hildreth_triggered();
 
+    void on_actionLocal_triggered();
+
 private:
     Ui::HW3 *ui;
 
@@ -60,6 +65,7 @@ private:
     GaussianBlurDialog* gaussianBlurDialog;
     MedianBlurDialog* medianBlurDialog;
     MarrHildrethEdgeDetectionDialog* marrHildrethEdgeDetectionDialog;
+    LocalEnhancementDialog* localEnhancementDialog;
 
     /*Create a timer to measure execution time*/
     QElapsedTimer timer;

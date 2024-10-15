@@ -65,8 +65,15 @@
      <addaction name="actionSobel"/>
      <addaction name="actionMarr_Hildreth"/>
     </widget>
+    <widget class="QMenu" name="menuEnhancement">
+     <property name="title">
+      <string>Enhancement</string>
+     </property>
+     <addaction name="actionLocal"/>
+    </widget>
     <addaction name="menu_Blur"/>
     <addaction name="menuEdge_Detect"/>
+    <addaction name="menuEnhancement"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -150,6 +157,11 @@
   <action name="actionMarr_Hildreth">
    <property name="text">
     <string>Marr-Hildreth</string>
+   </property>
+  </action>
+  <action name="actionLocal">
+   <property name="text">
+    <string>Local</string>
    </property>
   </action>
  </widget>

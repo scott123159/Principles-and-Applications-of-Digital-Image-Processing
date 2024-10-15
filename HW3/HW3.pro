@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     gaussianblurdialog.cpp \
     imgproc.cpp \
+    localenhancementdialog.cpp \
     main.cpp \
     hw3.cpp \
     marrhildrethedgedetectiondialog.cpp \
@@ -20,12 +21,14 @@ HEADERS += \
     gaussianblurdialog.h \
     hw3.h \
     imgproc.h \
+    localenhancementdialog.h \
     marrhildrethedgedetectiondialog.h \
     medianblurdialog.h
 
 FORMS += \
     gaussianblurdialog.ui \
     hw3.ui \
+    localenhancementdialog.ui \
     marrhildrethedgedetectiondialog.ui \
     medianblurdialog.ui
 

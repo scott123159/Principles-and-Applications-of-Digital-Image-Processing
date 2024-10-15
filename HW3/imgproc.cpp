@@ -277,3 +277,71 @@ QImage cv::applyMarrHildreth(const QImage &src, const int size, const double thr
         }
     return dst;
 }
+
+QImage cv::applyLocalHistogramEnhancement(const QImage &image, const int size, const double k0, const double k1, const double k2, const double k3, const double c)
+{
+    QImage gray_image(image);
+    QImage he_image = QImage(image);
+    QImage lhe_image = QImage(image);
+    QImage contrast_image = QImage(image);
+    double global_avg = 0.0;//全域平均
+    double global_dev = 0.0;//全域標準差
+    for(int i = 0; i < image.height(); i++) {
+        for(int j = 0; j < image.width(); j++) {
+            int r = (qRed(image.pixel(j, i)) + qGreen(image.pixel(j, i)) + qBlue(image.pixel(j, i))) / 3;
+            int g = r, b = r;
+            gray_image.setPixel(j, i, qRgb(r, g, b));
+        }
+    }
+    int nk[256] = {};                                           //計算出數量
+    for(int i = 0; i < image.height(); i++) {
+        for(int j = 0; j < image.width(); j++) {
+            nk[qRed(gray_image.pixel(j, i))] += 1;
+        }
+    }
+    double pdf[256] = {};                                       //計算出機率密度函數P.D.F
+    for(int i = 0; i < 256; i++) pdf[i] = (nk[i] * 1.0) / (image.height() * image.width());
+    double cdf[256] = {pdf[0]};
+    for(int i = 1; i < 256; i++) cdf[i] = cdf[i - 1] + pdf[i];  //計算出累計密度函數C.D.F
+    int histogramEqualization[256] = {};                        //計算出灰階值方圖平均所對應的灰階值
+    for(int i = 0; i < 256; i++)histogramEqualization[i] = cdf[i] * 255;
+    for(int i = 0; i < 256; i++) global_avg += (i * ((nk[i] * 1.0) / (image.height() * image.width())));
+    for(int i = 0; i < 256; i++) global_dev += ((i - global_avg) * ((i - global_avg))) * ((nk[i] * 1.0) / (image.height() * image.width()));
+    global_dev = sqrt(global_dev);
+    //計算區域平均以及區域標準差
+    for(int i = 0; i < image.height(); i++) {
+        for(int j = 0; j < image.width(); j++) {
+            double local_avg = 0.0;
+            double local_dev = 0.0;
+            int lnk[256] = {};
+            for(int y = 0; y < size; y++) {
+                for(int x = 0; x < size; x++) {
+                    int di = i + y - (size / 2);
+                    int dj = j + x - (size / 2);
+                    if (di >= 0 && di < image.height() && dj >= 0 && dj < image.width()) {
+                        lnk[qRed(gray_image.pixel(dj, di))]++;
+                    }
+                }
+            }
+            //計算區域平均以及區域標準差
+            for(int i = 0; i < 256; i++) local_avg += (i * ((lnk[i] * 1.0) / (size * size)));
+            //計算區域平均以及區域標準差
+            for(int i = 0; i < 256; i++) local_dev += ((i - local_avg) * (i - local_avg)) * (lnk[i] * 1.0 / size * size);
+            local_dev = sqrt(local_dev);
+            bool condition1 = k0 * global_avg <= local_avg && local_avg <= k1 * global_avg;
+            bool condition2 = k2 * global_dev <= local_dev && local_dev <= k3 * global_dev;
+            int r1 = qRed(gray_image.pixel(j, i));
+            int r2 = histogramEqualization[r1];
+            he_image.setPixel(j, i, qRgb(r2, r2, r2));
+            if(condition1 && condition2) {
+                r1 = r1 * c >= 255 ? 255 : (r1 * c);
+                lhe_image.setPixel(j, i, qRgb(r1, r1, r1));
+            } else {
+                lhe_image.setPixel(j, i, qRgb(r1, r1, r1));
+            }
+            //unsigned int gray = histogramEqualization[qRed(gray_image.pixel(j, i))];
+
+        }
+    }
+    return lhe_image;
+}
