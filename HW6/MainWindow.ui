@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>HW6</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="image">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuTransformation">
+    <property name="title">
+     <string>Geometric Transformation</string>
+    </property>
+    <addaction name="actionTrapezoidal"/>
+    <addaction name="actionWavy"/>
+    <addaction name="actionCircular"/>
+   </widget>
+   <widget class="QMenu" name="menuImage_Fusion">
+    <property name="title">
+     <string>Image Fusion</string>
+    </property>
+    <addaction name="actionLoad_Images"/>
+   </widget>
+   <widget class="QMenu" name="menuImage_Segmentation">
+    <property name="title">
+     <string>Image Segmentation</string>
+    </property>
+    <addaction name="actionSLIC"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuTransformation"/>
+   <addaction name="menuImage_Fusion"/>
+   <addaction name="menuImage_Segmentation"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionTrapezoidal">
+   <property name="text">
+    <string>Trapezoidal</string>
+   </property>
+  </action>
+  <action name="actionWavy">
+   <property name="text">
+    <string>Wavy</string>
+   </property>
+  </action>
+  <action name="actionCircular">
+   <property name="text">
+    <string>Circular</string>
+   </property>
+  </action>
+  <action name="actionLoad_Images">
+   <property name="text">
+    <string>Load Images</string>
+   </property>
+  </action>
+  <action name="actionSLIC">
+   <property name="text">
+    <string>SLIC</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
